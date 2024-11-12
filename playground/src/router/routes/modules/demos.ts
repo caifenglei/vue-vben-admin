@@ -174,7 +174,17 @@ const routes: RouteRecordRaw[] = [
               import('#/views/demos/features/full-screen/index.vue'),
             meta: {
               icon: 'lucide:fullscreen',
-              title: $t('demos.features.title'),
+              title: $t('demos.features.fullScreen'),
+            },
+          },
+          {
+            name: 'FileDownloadDemo',
+            path: '/demos/features/file-download',
+            component: () =>
+              import('#/views/demos/features/file-download/index.vue'),
+            meta: {
+              icon: 'lucide:hard-drive-download',
+              title: $t('demos.features.fileDownload'),
             },
           },
           {
@@ -198,6 +208,17 @@ const routes: RouteRecordRaw[] = [
                 id: 1,
               },
               title: $t('demos.features.menuWithQuery'),
+            },
+          },
+          {
+            name: 'NewWindowDemo',
+            path: '/demos/new-window',
+            component: () =>
+              import('#/views/demos/features/new-window/index.vue'),
+            meta: {
+              icon: 'lucide:app-window',
+              openInNewWindow: true,
+              title: $t('demos.features.openInNewWindow'),
             },
           },
           {

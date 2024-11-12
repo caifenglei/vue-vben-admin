@@ -1,4 +1,4 @@
-import type { DeepPartial } from '@vben/types';
+import type { ClassType, DeepPartial } from '@vben/types';
 import type { VbenFormProps } from '@vben-core/form-ui';
 import type {
   VxeGridListeners,
@@ -20,13 +20,21 @@ export interface VxePaginationInfo {
 
 export interface VxeGridProps {
   /**
+   * 标题
+   */
+  tableTitle?: string;
+  /**
+   * 标题帮助
+   */
+  tableTitleHelp?: string;
+  /**
    * 组件class
    */
-  class?: any;
+  class?: ClassType;
   /**
    * vxe-grid class
    */
-  gridClass?: any;
+  gridClass?: ClassType;
   /**
    * vxe-grid 配置
    */

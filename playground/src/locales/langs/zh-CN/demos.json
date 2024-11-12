@@ -48,7 +48,9 @@
     "tabDetail": "标签详情页",
     "fullScreen": "全屏",
     "clipboard": "剪贴板",
-    "menuWithQuery": "带参菜单"
+    "menuWithQuery": "带参菜单",
+    "openInNewWindow": "新窗口打开",
+    "fileDownload": "文件下载"
   },
   "breadcrumb": {
     "navigation": "面包屑导航",
