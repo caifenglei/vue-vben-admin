@@ -21,6 +21,14 @@ const settings: RouteRecordRaw[] = [
           title: $t('settings.roles'),
         },
       },
+      {
+        name: 'Dicts',
+        path: '/settings/dicts',
+        component: () => import('#/views/settings/dicts/index.vue'),
+        meta: {
+          title: $t('settings.dicts'),
+        },
+      },
     ],
   },
 ];

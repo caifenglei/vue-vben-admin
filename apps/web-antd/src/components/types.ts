@@ -1,8 +1,11 @@
 export interface EntityField {
   name: string;
   label: string;
-  range: [boolean, boolean, boolean, boolean]; // [query, table, form, detail]
-  type?: string;
+  component: string;
+  // ComponentProps
+  props?: any;
+  // [query, table, form, detail]
+  range: [boolean, boolean, boolean, boolean];
   width?: string;
   align?: string;
   sortable?: boolean;

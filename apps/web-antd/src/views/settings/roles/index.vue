@@ -27,7 +27,7 @@ const fields: EntityField[] = [
     label: '类型',
     range: [false, true, true, true],
     component: 'Select',
-    componentProps: {
+    props: {
       allowClear: true,
       options: [
         {
