@@ -1,16 +1,12 @@
 <script lang="ts" setup>
 import type { VbenFormProps, VbenFormSchema } from '#/adapter/form';
 import type { VxeGridProps } from '#/adapter/vxe-table';
-import type { QueryableTableProps } from '#/components/types';
+import type { QueryableTableProps as Props } from '#/components/types';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { getExampleTableApi } from '#/api';
 import { FieldPosition, useFormField } from '#/composables/use-form-field';
 import { message } from 'ant-design-vue';
 
-interface Props extends QueryableTableProps {
-  // api: ExtendedVxeGridApi;
-}
 const props = withDefaults(defineProps<Props>(), {});
 
 // table query fields
@@ -62,7 +58,7 @@ const gridOptions: VxeGridProps<RowType> = {
     ajax: {
       query: async ({ page }, formValues) => {
         message.success(`Query params: ${JSON.stringify(formValues)}`);
-        return await getExampleTableApi({
+        return await props.httpQuery({
           page: page.currentPage,
           pageSize: page.pageSize,
           ...formValues,

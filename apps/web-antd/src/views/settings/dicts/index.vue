@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { EntityField } from '#/components/types';
 
+import { query } from '#/api';
 import DrawableForm from '#/components/DrawableForm.vue';
 import QueryableTable from '#/components/QueryableTable.vue';
 import { Page, useVbenDrawer } from '@vben/common-ui';
@@ -47,7 +48,7 @@ const createDict = () => {
 
 <template>
   <Page auto-content-height>
-    <QueryableTable :fields="fields">
+    <QueryableTable :fields="fields" :http-query="query">
       <template #toolbar-tools>
         <Button class="mr-2" type="primary" @click="createDict">
           新增根字典

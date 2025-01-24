@@ -3,6 +3,7 @@
  */
 import type { HttpResponse } from '@vben/request';
 
+import { useAuthStore } from '#/store';
 import { useAppConfig } from '@vben/hooks';
 import { preferences } from '@vben/preferences';
 import {
@@ -11,16 +12,13 @@ import {
   RequestClient,
 } from '@vben/request';
 import { useAccessStore } from '@vben/stores';
-
 import { message } from 'ant-design-vue';
-
-import { useAuthStore } from '#/store';
 
 import { refreshTokenApi } from './core';
 
 const { apiURL } = useAppConfig(import.meta.env, import.meta.env.PROD);
 
-function createRequestClient(baseURL: string) {
+export function createRequestClient(baseURL: string) {
   const client = new RequestClient({
     baseURL,
   });

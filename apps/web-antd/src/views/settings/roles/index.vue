@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import type { EntityField } from '#/components/types';
 
+import { getExampleTableApi } from '#/api';
 import QueryableTable from '#/components/QueryableTable.vue';
 
 const fields: EntityField[] = [
@@ -45,5 +46,5 @@ const fields: EntityField[] = [
 </script>
 
 <template>
-  <QueryableTable :fields="fields" />
+  <QueryableTable :fields="fields" :http-query="getExampleTableApi" />
 </template>

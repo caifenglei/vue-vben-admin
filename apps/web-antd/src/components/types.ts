@@ -1,3 +1,5 @@
+import type { TableApi } from '#/api';
+
 export interface EntityField {
   name: string;
   label: string;
@@ -15,5 +17,6 @@ export interface EntityField {
 export interface QueryableTableProps {
   entity?: string;
   fields: EntityField[];
+  httpQuery: (params: TableApi.PageFetchParams) => Promise<any>;
   onQueryChange?: (query: any) => void;
 }
