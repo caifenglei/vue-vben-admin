@@ -9,10 +9,9 @@ import type {
   FormShape,
 } from '../types';
 
-import { computed } from 'vue';
-
 import { Form } from '@vben-core/shadcn-ui';
 import { cn, isString, mergeWithArrayOverride } from '@vben-core/shared/utils';
+import { computed } from 'vue';
 
 import { provideFormRenderProps } from './context';
 import { useExpandable } from './expandable';
@@ -22,7 +21,7 @@ import { getBaseRules, getDefaultValueInZodStack } from './helper';
 interface Props extends FormRenderProps {}
 
 const props = withDefaults(
-  defineProps<Props & { globalCommonConfig?: FormCommonConfig }>(),
+  defineProps<{ globalCommonConfig?: FormCommonConfig } & Props>(),
   {
     collapsedRows: 1,
     commonConfig: () => ({}),
@@ -80,10 +79,10 @@ const formCollapsed = computed(() => {
 });
 
 const computedSchema = computed(
-  (): (Omit<FormSchema, 'formFieldProps'> & {
+  (): ({
     commonComponentProps: Record<string, any>;
     formFieldProps: Record<string, any>;
-  })[] => {
+  } & Omit<FormSchema, 'formFieldProps'>)[] => {
     const {
       colon = false,
       componentProps = {},
@@ -98,6 +97,7 @@ const computedSchema = computed(
       hideRequiredMark = false,
       labelClass = '',
       labelWidth = 100,
+      modelPropName = '',
       wrapperClass = '',
     } = mergeWithArrayOverride(props.commonConfig, props.globalCommonConfig);
     return (props.schema || []).map((schema, index) => {
@@ -118,6 +118,7 @@ const computedSchema = computed(
         hideLabel,
         hideRequiredMark,
         labelWidth,
+        modelPropName,
         wrapperClass,
         ...schema,
         commonComponentProps: componentProps,

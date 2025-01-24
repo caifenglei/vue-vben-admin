@@ -3,11 +3,9 @@ import type { DialogContentEmits, DialogContentProps } from 'radix-vue';
 
 import type { SheetVariants } from './sheet';
 
-import { computed, ref } from 'vue';
-
 import { cn } from '@vben-core/shared/utils';
-
 import { DialogContent, DialogPortal, useForwardPropsEmits } from 'radix-vue';
+import { computed, ref } from 'vue';
 
 import { sheetVariants } from './sheet';
 import SheetOverlay from './SheetOverlay.vue';
@@ -17,6 +15,7 @@ interface SheetContentProps extends DialogContentProps {
   class?: any;
   modal?: boolean;
   open?: boolean;
+  overlayBlur?: number;
   side?: SheetVariants['side'];
   zIndex?: number;
 }
@@ -27,11 +26,10 @@ defineOptions({
 
 const props = withDefaults(defineProps<SheetContentProps>(), {
   appendTo: 'body',
-  zIndex: 1000,
 });
 
 const emits = defineEmits<
-  DialogContentEmits & { close: []; closed: []; opened: [] }
+  { close: []; closed: []; opened: [] } & DialogContentEmits
 >();
 
 const delegatedProps = computed(() => {
@@ -75,12 +73,23 @@ function onAnimationEnd(event: AnimationEvent) {
 <template>
   <DialogPortal :to="appendTo">
     <Transition name="fade">
-      <SheetOverlay v-if="open && modal" :style="{ zIndex, position }" />
+      <SheetOverlay
+        v-if="open && modal"
+        :style="{
+          ...(zIndex ? { zIndex } : {}),
+          position,
+          backdropFilter:
+            overlayBlur && overlayBlur > 0 ? `blur(${overlayBlur}px)` : 'none',
+        }"
+      />
     </Transition>
     <DialogContent
       ref="contentRef"
-      :class="cn(sheetVariants({ side }), props.class)"
-      :style="{ zIndex, position }"
+      :class="cn('z-popup', sheetVariants({ side }), props.class)"
+      :style="{
+        ...(zIndex ? { zIndex } : {}),
+        position,
+      }"
       @animationend="onAnimationEnd"
       v-bind="{ ...forwarded, ...$attrs }"
     >

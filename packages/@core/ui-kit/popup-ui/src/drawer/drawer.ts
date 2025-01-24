@@ -1,6 +1,5 @@
-import type { Component, Ref } from 'vue';
-
 import type { ClassType } from '@vben-core/typings';
+import type { Component, Ref } from 'vue';
 
 import type { DrawerApi } from './drawer-api';
 
@@ -86,11 +85,15 @@ export interface DrawerProps {
    */
   openAutoFocus?: boolean;
   /**
+   * 弹窗遮罩模糊效果
+   */
+  overlayBlur?: number;
+
+  /**
    * 抽屉位置
    * @default right
    */
   placement?: DrawerPlacement;
-
   /**
    * 是否显示取消按钮
    * @default true
@@ -124,11 +127,11 @@ export interface DrawerState extends DrawerProps {
   sharedData?: Record<string, any>;
 }
 
-export type ExtendedDrawerApi = DrawerApi & {
+export type ExtendedDrawerApi = {
   useStore: <T = NoInfer<DrawerState>>(
     selector?: (state: NoInfer<DrawerState>) => T,
   ) => Readonly<Ref<T>>;
-};
+} & DrawerApi;
 
 export interface DrawerApiOptions extends DrawerState {
   /**
