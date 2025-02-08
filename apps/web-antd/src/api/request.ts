@@ -3,7 +3,6 @@
  */
 import type { RequestClientOptions } from '@vben/request';
 
-import { useAuthStore } from '#/store';
 import { useAppConfig } from '@vben/hooks';
 import { preferences } from '@vben/preferences';
 import {
@@ -13,7 +12,10 @@ import {
   RequestClient,
 } from '@vben/request';
 import { useAccessStore } from '@vben/stores';
+
 import { message } from 'ant-design-vue';
+
+import { useAuthStore } from '#/store';
 
 import { refreshTokenApi } from './core';
 
@@ -74,7 +76,7 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
     defaultResponseInterceptor({
       codeField: 'code',
       dataField: 'data',
-      successCode: 0,
+      successCode: () => true, // 兼顾mock和api的code，后续替换优化 TODO
     }),
   );
 

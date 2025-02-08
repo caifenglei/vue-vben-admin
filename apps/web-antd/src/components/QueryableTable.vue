@@ -3,9 +3,10 @@ import type { VbenFormProps, VbenFormSchema } from '#/adapter/form';
 import type { VxeGridProps } from '#/adapter/vxe-table';
 import type { QueryableTableProps as Props } from '#/components/types';
 
+import { message } from 'ant-design-vue';
+
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { FieldPosition, useFormField } from '#/composables/use-form-field';
-import { message } from 'ant-design-vue';
 
 const props = withDefaults(defineProps<Props>(), {});
 
@@ -18,16 +19,17 @@ const querySchema: VbenFormSchema[] = useFormField(
 // table columns
 const tableFields = props.fields.filter((field) => field.range[1]);
 const tableColumns = tableFields.map((field) => {
-  return { field: field.name, title: field.label };
+  return {
+    field: field.name,
+    title: field.label,
+    treeNode: field.treeNode || false,
+  };
 });
 
 interface RowType {
-  category: string;
-  color: string;
-  id: string;
-  price: string;
-  productName: string;
-  releaseDate: string;
+  label: string;
+  code: string;
+  updated_at: string;
 }
 
 const formOptions: VbenFormProps = {
@@ -65,6 +67,12 @@ const gridOptions: VxeGridProps<RowType> = {
         });
       },
     },
+  },
+  treeConfig: {
+    parentField: 'parent_id',
+    // childrenField: 'children',
+    rowField: 'id',
+    transform: true,
   },
 };
 

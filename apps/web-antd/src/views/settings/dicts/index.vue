@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import type { EntityField } from '#/components/types';
 
+import { Page, useVbenDrawer } from '@vben/common-ui';
+
+import { Button } from 'ant-design-vue';
+
 import { query } from '#/api';
 import DrawableForm from '#/components/DrawableForm.vue';
 import QueryableTable from '#/components/QueryableTable.vue';
-import { Page, useVbenDrawer } from '@vben/common-ui';
-import { Button } from 'ant-design-vue';
 
 // interface DataItem {
 //   label: string;
@@ -25,11 +27,18 @@ const fields: EntityField[] = [
     label: '字典名称',
     range: [false, true, true, false],
     component: 'Input',
+    treeNode: true,
   },
   {
-    name: 'value',
-    label: '字典值',
+    name: 'code',
+    label: '字典编码',
     range: [false, true, true, false],
+    component: 'Input',
+  },
+  {
+    name: 'updated_at',
+    label: '更新时间',
+    range: [false, true, false, true],
     component: 'Input',
   },
 ];
@@ -40,7 +49,7 @@ const [DrawerForm, formDrawerApi] = useVbenDrawer({
 const createDict = () => {
   formDrawerApi.setData({
     fields,
-    title: '新增根字典',
+    title: '新增字典',
   });
   formDrawerApi.open();
 };
@@ -51,7 +60,7 @@ const createDict = () => {
     <QueryableTable :fields="fields" :http-query="query">
       <template #toolbar-tools>
         <Button class="mr-2" type="primary" @click="createDict">
-          新增根字典
+          新增字典
         </Button>
       </template>
     </QueryableTable>
