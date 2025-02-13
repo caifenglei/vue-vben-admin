@@ -9,5 +9,6 @@ export namespace TableApi {
 export * from './auth';
 export * from './dict';
 export * from './menu';
+export * as PermissionApi from './permission';
 export * from './table';
 export * from './user';

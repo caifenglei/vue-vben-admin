@@ -29,6 +29,14 @@ const settings: RouteRecordRaw[] = [
           title: $t('settings.dicts'),
         },
       },
+      {
+        name: 'Perms',
+        path: '/settings/perms',
+        component: () => import('#/views/settings/perms/index.vue'),
+        meta: {
+          title: $t('settings.perms'),
+        },
+      },
     ],
   },
 ];

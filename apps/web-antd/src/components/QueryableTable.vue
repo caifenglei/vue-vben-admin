@@ -29,7 +29,9 @@ const tableColumns = tableFields.map((field) => {
 interface RowType {
   label: string;
   code: string;
+  type: string;
   updated_at: string;
+  // [key: string]: string;
 }
 
 const formOptions: VbenFormProps = {
@@ -57,6 +59,11 @@ const gridOptions: VxeGridProps<RowType> = {
   keepSource: true,
   pagerConfig: {},
   proxyConfig: {
+    response: {
+      total: 'total',
+      list: 'data',
+      result: 'data', // 默认为 result, 取数据的key
+    },
     ajax: {
       query: async ({ page }, formValues) => {
         message.success(`Query params: ${JSON.stringify(formValues)}`);
