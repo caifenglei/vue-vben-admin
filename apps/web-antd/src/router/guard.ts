@@ -7,6 +7,7 @@ import { startProgress, stopProgress } from '@vben/utils';
 
 import { accessRoutes, coreRouteNames } from '#/router/routes';
 import { useAuthStore } from '#/store';
+import { useDictStore } from '#/store/modules/dict';
 
 import { generateAccess } from './access';
 
@@ -24,6 +25,12 @@ function setupCommonGuard(router: Router) {
     // 页面加载进度条
     if (!to.meta.loaded && preferences.transition.progress) {
       startProgress();
+    }
+
+    // 字典加载
+    const dictStore = useDictStore();
+    if (dictStore.dicts.length === 0) {
+      await dictStore.setDicts();
     }
     return true;
   });

@@ -10,6 +10,10 @@ export namespace AuthApi {
   /** 登录接口返回值 */
   export interface LoginResult {
     accessToken: string;
+    access_token: string;
+    expires_in: number;
+    token_type: string;
+    user: object;
   }
 
   export interface RefreshTokenResult {
@@ -22,7 +26,8 @@ export namespace AuthApi {
  * 登录
  */
 export async function loginApi(data: AuthApi.LoginParams) {
-  return requestClient.post<AuthApi.LoginResult>('/auth/login', data);
+  // return requestClient.post<AuthApi.LoginResult>('/auth/login', data);
+  return requestClient.post<AuthApi.LoginResult>('/v2/mp/login', data);
 }
 
 /**

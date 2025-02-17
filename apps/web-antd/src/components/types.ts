@@ -6,6 +6,7 @@ export interface EntityField {
   component: string;
   // ComponentProps
   props?: any;
+  dictName?: string;
   // [query, table, form, detail]
   range: [boolean, boolean, boolean, boolean];
   width?: string;

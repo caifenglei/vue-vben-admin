@@ -19,11 +19,15 @@ const querySchema: VbenFormSchema[] = useFormField(
 // table columns
 const tableFields = props.fields.filter((field) => field.range[1]);
 const tableColumns = tableFields.map((field) => {
-  return {
+  const col = {
     field: field.name,
     title: field.label,
     treeNode: field.treeNode || false,
   };
+  if (field.component === 'Select') {
+    col.cellRender = { name: 'DictLabel', props: { dictName: field.dictName } };
+  }
+  return col;
 });
 
 interface RowType {
@@ -47,11 +51,11 @@ const formOptions: VbenFormProps = {
 const gridOptions: VxeGridProps<RowType> = {
   checkboxConfig: {
     highlight: true,
-    labelField: 'name',
+    // labelField: 'name',
   },
   columns: [
     { align: 'left', title: '', type: 'checkbox', width: 50 },
-    { title: '序号', type: 'seq', width: 50 },
+    { title: '序号', type: 'seq', width: 80 },
     ...tableColumns,
     // { field: 'releaseDate', formatter: 'formatDateTime', title: 'Date' },
   ],

@@ -34,19 +34,7 @@ const fields: EntityField[] = [
     label: '权限类型',
     range: [false, true, true, false],
     component: 'Select',
-    props: {
-      allowClear: true,
-      options: [
-        {
-          label: '菜单',
-          value: '1',
-        },
-        {
-          label: '页面',
-          value: '2',
-        },
-      ],
-    },
+    dictName: 'page_permission_types',
   },
   {
     name: 'updated_at',

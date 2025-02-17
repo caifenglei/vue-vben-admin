@@ -4,6 +4,8 @@ import { setupVbenVxeTable, useVbenVxeGrid } from '@vben/plugins/vxe-table';
 
 import { Button, Image } from 'ant-design-vue';
 
+import { useDictStore } from '#/store/modules/dict';
+
 import { useVbenForm } from './form';
 
 setupVbenVxeTable({
@@ -53,6 +55,21 @@ setupVbenVxeTable({
           { size: 'small', type: 'link' },
           { default: () => props?.text },
         );
+      },
+    });
+
+    // 下拉选项的label在表格单元格中的展示
+    vxeUI.renderer.add('DictLabel', {
+      renderTableDefault(renderOpts, params) {
+        const { props } = renderOpts;
+        const { column, row } = params;
+        const dictStore = useDictStore();
+        const options = dictStore.getDict(props.dictName)?.children;
+        const value = row[column.field];
+        const label = options?.find(
+          (opt) => opt.code === value.toString(),
+        )?.label;
+        return h('span', {}, { default: () => label || value });
       },
     });
 
