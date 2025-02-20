@@ -1,7 +1,9 @@
 <script lang="ts" setup>
-import type { EntityField } from '#/components/types';
+import type { EntityField, TableRowAction } from '#/components/types';
 
-import { getExampleTableApi } from '#/api';
+import { MdiDelete, MdiEdit } from '@vben/icons';
+
+import { RoleApi } from '#/api';
 import QueryableTable from '#/components/QueryableTable.vue';
 
 const fields: EntityField[] = [
@@ -24,27 +26,28 @@ const fields: EntityField[] = [
     component: 'Input',
   },
   {
-    name: 'type',
-    label: '类型',
-    range: [false, true, true, true],
-    component: 'Select',
-    props: {
-      allowClear: true,
-      options: [
-        {
-          label: '菜单',
-          value: '1',
-        },
-        {
-          label: '页面',
-          value: '2',
-        },
-      ],
-    },
+    name: 'updated_at',
+    label: '更新时间',
+    range: [false, true, false, true],
+    component: 'Input',
+  },
+];
+const rowActions: TableRowAction[] = [
+  {
+    icon: MdiEdit,
+    text: '编辑',
+  },
+  {
+    icon: MdiDelete,
+    text: '删除',
   },
 ];
 </script>
 
 <template>
-  <QueryableTable :fields="fields" :http-query="getExampleTableApi" />
+  <QueryableTable
+    :fields="fields"
+    :http-query="RoleApi.query"
+    :row-actions="rowActions"
+  />
 </template>

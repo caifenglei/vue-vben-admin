@@ -16,9 +16,22 @@ export interface EntityField {
   formatter?: (row: any, column: any, cellValue: any, index: number) => any;
 }
 
+export interface TableRowAction {
+  icon: string;
+  text: string;
+  disabled?: (row: any) => any | boolean;
+  handle?: (row: any, action: TableRowAction) => any;
+}
+
 export interface QueryableTableProps {
   entity?: string;
   fields: EntityField[];
+  rowActions?: TableRowAction[];
   httpQuery: (params: TableApi.PageFetchParams) => Promise<any>;
   onQueryChange?: (query: any) => void;
+}
+
+export interface TableRowActionProps {
+  actions: TableRowAction[];
+  row: any;
 }

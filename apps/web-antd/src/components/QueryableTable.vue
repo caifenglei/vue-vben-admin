@@ -6,6 +6,7 @@ import type { QueryableTableProps as Props } from '#/components/types';
 import { message } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
+import TableRowAction from '#/components/TableRowAction.vue';
 import { FieldPosition, useFormField } from '#/composables/use-form-field';
 
 const props = withDefaults(defineProps<Props>(), {});
@@ -48,17 +49,25 @@ const formOptions: VbenFormProps = {
   submitOnEnter: false,
 };
 
+const columns = [
+  { align: 'left', title: '', type: 'checkbox', width: 50 },
+  { title: '序号', type: 'seq', width: 80 },
+  ...tableColumns,
+];
+
+if (props.rowActions.length > 0) {
+  columns.push({
+    slots: { default: 'actions' },
+    title: '操作',
+  });
+}
+
 const gridOptions: VxeGridProps<RowType> = {
   checkboxConfig: {
     highlight: true,
     // labelField: 'name',
   },
-  columns: [
-    { align: 'left', title: '', type: 'checkbox', width: 50 },
-    { title: '序号', type: 'seq', width: 80 },
-    ...tableColumns,
-    // { field: 'releaseDate', formatter: 'formatDateTime', title: 'Date' },
-  ],
+  columns,
   height: 'auto',
   keepSource: true,
   pagerConfig: {},
@@ -94,6 +103,9 @@ const [Grid] = useVbenVxeGrid({ formOptions, gridOptions });
   <Grid>
     <template #toolbar-tools>
       <slot name="toolbar-tools"></slot>
+    </template>
+    <template #actions="{ row }">
+      <TableRowAction :actions="props.rowActions" :row="row" />
     </template>
   </Grid>
 </template>
