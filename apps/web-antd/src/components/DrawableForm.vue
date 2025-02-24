@@ -1,12 +1,16 @@
 <script lang="ts" setup>
+import { ref } from 'vue';
+
+import { useVbenDrawer } from '@vben/common-ui';
+
 import { useVbenForm } from '#/adapter/form';
 import { FieldPosition, useFormField } from '#/composables/use-form-field';
-import { useVbenDrawer } from '@vben/common-ui';
-import { ref } from 'vue';
 
 defineOptions({
   name: 'DrawableForm',
 });
+
+const emit = defineEmits(['update']);
 
 const [Form, formApi] = useVbenForm({
   // schema: formSchema,
@@ -19,13 +23,17 @@ const [Drawer, drawerApi] = useVbenDrawer({
     drawerApi.close();
   },
   onConfirm: async () => {
-    await formApi.submitForm();
+    const values = await formApi.getValues();
+    const { api } = drawerApi.getData<Record<string, any>>();
+    await api(values);
+    emit('update', values);
     drawerApi.close();
   },
   onOpenChange(isOpen: boolean) {
     if (isOpen) {
-      const { fields, title } = drawerApi.getData<Record<string, any>>();
+      const { row, fields, title } = drawerApi.getData<Record<string, any>>();
       formApi.setState({ schema: useFormField(fields, FieldPosition.FORM) });
+      formApi.setValues(row, false);
       drawerTitle.value = title;
     }
   },

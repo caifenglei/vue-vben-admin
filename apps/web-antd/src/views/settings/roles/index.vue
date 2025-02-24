@@ -1,9 +1,13 @@
 <script lang="ts" setup>
 import type { EntityField, TableRowAction } from '#/components/types';
 
+import { useTemplateRef } from 'vue';
+
+import { Page, useVbenDrawer } from '@vben/common-ui';
 import { MdiDelete, MdiEdit } from '@vben/icons';
 
 import { RoleApi } from '#/api';
+import DrawableForm from '#/components/DrawableForm.vue';
 import QueryableTable from '#/components/QueryableTable.vue';
 
 const fields: EntityField[] = [
@@ -32,22 +36,47 @@ const fields: EntityField[] = [
     component: 'Input',
   },
 ];
+
+const [DrawerForm, formDrawerApi] = useVbenDrawer({
+  connectedComponent: DrawableForm,
+});
+const editRow = (row: any, action: TableRowAction) => {
+  formDrawerApi.setData({
+    api: RoleApi.update,
+    row,
+    fields,
+    title: action.text,
+  });
+  formDrawerApi.open();
+};
+
 const rowActions: TableRowAction[] = [
   {
     icon: MdiEdit,
     text: '编辑',
+    handle: editRow,
   },
   {
     icon: MdiDelete,
     text: '删除',
   },
 ];
+
+const queryableTable =
+  useTemplateRef<InstanceType<typeof QueryableTable>>('queryableTable');
+const reloadTable = function () {
+  queryableTable.value?.reloadTable();
+};
 </script>
 
 <template>
-  <QueryableTable
-    :fields="fields"
-    :http-query="RoleApi.query"
-    :row-actions="rowActions"
-  />
+  <Page auto-content-height>
+    <QueryableTable
+      ref="queryableTable"
+      :fields="fields"
+      :http-query="RoleApi.query"
+      :row-actions="rowActions"
+    />
+    <DrawerForm @update="reloadTable" />
+  </Page>
 </template>

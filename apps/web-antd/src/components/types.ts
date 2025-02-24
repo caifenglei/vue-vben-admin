@@ -17,7 +17,7 @@ export interface EntityField {
 }
 
 export interface TableRowAction {
-  icon: string;
+  icon: any; // DefinedComponent
   text: string;
   disabled?: (row: any) => any | boolean;
   handle?: (row: any, action: TableRowAction) => any;

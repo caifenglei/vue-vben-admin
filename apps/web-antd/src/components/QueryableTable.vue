@@ -32,11 +32,11 @@ const tableColumns = tableFields.map((field) => {
 });
 
 interface RowType {
-  label: string;
-  code: string;
-  type: string;
-  updated_at: string;
-  // [key: string]: string;
+  // label: string;
+  // code: string;
+  // type: string;
+  // updated_at: string;
+  [key: string]: any;
 }
 
 const formOptions: VbenFormProps = {
@@ -55,7 +55,7 @@ const columns = [
   ...tableColumns,
 ];
 
-if (props.rowActions.length > 0) {
+if (props.rowActions?.length > 0) {
   columns.push({
     slots: { default: 'actions' },
     title: '操作',
@@ -96,7 +96,14 @@ const gridOptions: VxeGridProps<RowType> = {
   },
 };
 
-const [Grid] = useVbenVxeGrid({ formOptions, gridOptions });
+const [Grid, gridApi] = useVbenVxeGrid({ formOptions, gridOptions });
+
+const reloadTable = function () {
+  gridApi.reload();
+};
+defineExpose({
+  reloadTable,
+});
 </script>
 
 <template>
