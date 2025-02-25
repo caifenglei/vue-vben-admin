@@ -12,5 +12,6 @@ export const MdiGoogle = createIconifyIcon('mdi:google');
 
 export const MdiQqchat = createIconifyIcon('mdi:qqchat');
 
+export const MdiCreate = createIconifyIcon('mdi:add');
 export const MdiEdit = createIconifyIcon('mdi:edit');
 export const MdiDelete = createIconifyIcon('mdi:delete');

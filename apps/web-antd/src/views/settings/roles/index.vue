@@ -1,18 +1,13 @@
 <script lang="ts" setup>
-import type {
-  EntityField,
-  TableAction,
-  TableRowAction,
-} from '#/components/types';
+import type { EntityField } from '#/components/types';
 
 import { useTemplateRef } from 'vue';
 
-import { Page, useVbenDrawer } from '@vben/common-ui';
-import { MdiDelete, MdiEdit } from '@vben/icons';
+import { Page } from '@vben/common-ui';
 
 import { RoleApi } from '#/api';
-import DrawableForm from '#/components/DrawableForm.vue';
 import QueryableTable from '#/components/QueryableTable.vue';
+import { useTableAction } from '#/composables/use-table-action';
 
 const fields: EntityField[] = [
   {
@@ -51,69 +46,20 @@ const fields: EntityField[] = [
   },
 ];
 
-const queryableTable =
-  useTemplateRef<InstanceType<typeof QueryableTable>>('queryableTable');
-const reloadTable = function () {
-  queryableTable.value?.reloadTable();
-};
-
-const [DrawerForm, formDrawerApi] = useVbenDrawer({
-  connectedComponent: DrawableForm,
+const { tableActions, rowActions, DrawerForm, reloadTable } = useTableAction({
+  tableRef: useTemplateRef<InstanceType<typeof QueryableTable>>('mainTable'),
+  httpApis: RoleApi,
+  fields,
+  createAction: {
+    label: '新增角色',
+  },
 });
-
-const createRow = (action: TableAction) => {
-  formDrawerApi.setData({
-    api: RoleApi.create,
-    fields,
-    row: { status: '1' },
-    title: action.text,
-  });
-  formDrawerApi.open();
-};
-
-const editRow = (row: any, action: TableRowAction) => {
-  formDrawerApi.setData({
-    api: RoleApi.update,
-    row,
-    fields,
-    title: action.text,
-  });
-  formDrawerApi.open();
-};
-
-const tableActions: TableAction[] = [
-  {
-    icon: MdiEdit,
-    text: '创建新角色',
-    handle: createRow,
-  },
-];
-
-const rowActions: TableRowAction[] = [
-  {
-    icon: MdiEdit,
-    text: '编辑',
-    handle: editRow,
-  },
-  {
-    icon: MdiDelete,
-    text: '删除',
-    handle: (row: any, _action: TableRowAction) => {
-      RoleApi.destroy(row).then((_: any) => {
-        reloadTable(); // TODO delete row length
-      });
-    },
-    popConfirm: {
-      title: '确定删除吗？',
-    },
-  },
-];
 </script>
 
 <template>
   <Page auto-content-height>
     <QueryableTable
-      ref="queryableTable"
+      ref="mainTable"
       :fields="fields"
       :http-query="RoleApi.query"
       :table-actions="tableActions"
