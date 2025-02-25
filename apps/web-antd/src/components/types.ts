@@ -15,6 +15,7 @@ export interface EntityField {
   sortable?: boolean;
   treeNode?: boolean; // 树形控制节点
   formatter?: (row: any, column: any, cellValue: any, index: number) => any;
+  rules?: string;
 }
 
 // 表操作属性

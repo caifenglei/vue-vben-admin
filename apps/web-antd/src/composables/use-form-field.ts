@@ -21,6 +21,9 @@ export function useFormField(fields: EntityField[], type: FieldPosition) {
       label: attrs.label,
       // rules: attrs.rules,
     };
+    if (type === FieldPosition.FORM) {
+      schema.rules = attrs.rules;
+    }
     if (component === 'Input') {
       schema.componentProps = {
         ...attrs.props,
@@ -44,6 +47,7 @@ export function useFormField(fields: EntityField[], type: FieldPosition) {
         options,
         allowClear: true,
         placeholder: attrs.props?.placeholder || `请选择${attrs.label}`,
+        class: 'w-full',
       };
     }
     return schema;

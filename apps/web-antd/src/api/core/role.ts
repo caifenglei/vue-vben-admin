@@ -17,5 +17,5 @@ export async function update(rowData: Record<string, any>) {
 }
 
 export async function destroy(rowData: Record<string, any>) {
-  return requestClient.delete(`v2/mp/roles/${rowData.id}`, rowData);
+  return requestClient.post(`v2/mp/roles_del`, { ids: [rowData.id] });
 }

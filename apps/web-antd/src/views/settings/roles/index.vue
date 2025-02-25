@@ -18,33 +18,36 @@ const fields: EntityField[] = [
   {
     name: 'keyword',
     label: '关键字',
-    range: [true, false, false, false],
     component: 'Input',
+    range: [true, false, false, false],
   },
   {
     name: 'name',
     label: '编码',
-    range: [false, true, true, true],
     component: 'Input',
+    rules: 'required',
+    range: [false, true, true, true],
   },
   {
     name: 'label',
     label: '名称',
-    range: [false, true, true, true],
     component: 'Input',
+    rules: 'required',
+    range: [false, true, true, true],
   },
   {
     name: 'status',
     label: '状态',
-    range: [true, true, true, true],
     component: 'Select',
     dictName: 'role_status',
+    rules: 'required',
+    range: [true, true, true, true],
   },
   {
     name: 'updated_at',
     label: '更新时间',
-    range: [false, true, false, true],
     component: 'Input',
+    range: [false, true, false, true],
   },
 ];
 
