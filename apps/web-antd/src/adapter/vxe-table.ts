@@ -64,10 +64,10 @@ setupVbenVxeTable({
         const { props } = renderOpts;
         const { column, row } = params;
         const dictStore = useDictStore();
-        const options = dictStore.getDict(props.dictName)?.children;
+        const options = dictStore.getDict(props?.dictName)?.children;
         const value = row[column.field];
         const label = options?.find(
-          (opt) => opt.code === value.toString(),
+          (opt: any) => opt.code === value.toString(),
         )?.label;
         return h('span', {}, { default: () => label || value });
       },

@@ -1,6 +1,8 @@
 import type { VbenFormSchema } from '#/adapter/form';
 import type { EntityField } from '#/components/types';
 
+import { useDictStore } from '#/store/modules/dict';
+
 export enum FieldPosition {
   DETAIL = 3,
   FORM = 2,
@@ -28,8 +30,18 @@ export function useFormField(fields: EntityField[], type: FieldPosition) {
         showCount: true,
       };
     } else if (component === 'Select') {
+      let options = [] as any[];
+      if (attrs.dictName) {
+        const dictStore = useDictStore();
+        options =
+          dictStore.getDict(attrs.dictName)?.children.map((item: any) => ({
+            label: item.label,
+            value: item.code,
+          })) || [];
+      }
       schema.componentProps = {
         ...attrs.props,
+        options,
         allowClear: true,
         placeholder: attrs.props?.placeholder || `请选择${attrs.label}`,
       };

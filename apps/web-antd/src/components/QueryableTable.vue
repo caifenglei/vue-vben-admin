@@ -6,6 +6,7 @@ import type { QueryableTableProps as Props } from '#/components/types';
 import { message } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
+import TableAction from '#/components/TableAction.vue';
 import TableRowAction from '#/components/TableRowAction.vue';
 import { FieldPosition, useFormField } from '#/composables/use-form-field';
 
@@ -18,18 +19,23 @@ const querySchema: VbenFormSchema[] = useFormField(
 );
 
 // table columns
-const tableFields = props.fields.filter((field) => field.range[1]);
-const tableColumns = tableFields.map((field) => {
-  const col = {
-    field: field.name,
-    title: field.label,
-    treeNode: field.treeNode || false,
-  };
-  if (field.component === 'Select') {
-    col.cellRender = { name: 'DictLabel', props: { dictName: field.dictName } };
-  }
-  return col;
-});
+const tableColumns = props.fields
+  .filter((field) => field.range[1])
+  .map((field) => {
+    const col = {
+      field: field.name,
+      title: field.label,
+      treeNode: field.treeNode || false,
+    };
+    // 字典选项字段
+    if (field.component === 'Select' && field.dictName) {
+      col.cellRender = {
+        name: 'DictLabel', // Custom Render
+        props: { dictName: field.dictName },
+      };
+    }
+    return col;
+  });
 
 interface RowType {
   // label: string;
@@ -110,6 +116,7 @@ defineExpose({
   <Grid>
     <template #toolbar-tools>
       <slot name="toolbar-tools"></slot>
+      <TableAction :actions="props.tableActions" />
     </template>
     <template #actions="{ row }">
       <TableRowAction :actions="props.rowActions" :row="row" />

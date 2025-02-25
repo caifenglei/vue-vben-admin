@@ -1,8 +1,8 @@
 export namespace TableApi {
   export interface PageFetchParams {
     [key: string]: any;
-    page: number;
-    pageSize: number;
+    page?: number;
+    pageSize?: number;
   }
 }
 

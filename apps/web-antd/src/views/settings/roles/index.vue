@@ -1,5 +1,9 @@
 <script lang="ts" setup>
-import type { EntityField, TableRowAction } from '#/components/types';
+import type {
+  EntityField,
+  TableAction,
+  TableRowAction,
+} from '#/components/types';
 
 import { useTemplateRef } from 'vue';
 
@@ -30,6 +34,13 @@ const fields: EntityField[] = [
     component: 'Input',
   },
   {
+    name: 'status',
+    label: '状态',
+    range: [true, true, true, true],
+    component: 'Select',
+    dictName: 'role_status',
+  },
+  {
     name: 'updated_at',
     label: '更新时间',
     range: [false, true, false, true],
@@ -37,9 +48,26 @@ const fields: EntityField[] = [
   },
 ];
 
+const queryableTable =
+  useTemplateRef<InstanceType<typeof QueryableTable>>('queryableTable');
+const reloadTable = function () {
+  queryableTable.value?.reloadTable();
+};
+
 const [DrawerForm, formDrawerApi] = useVbenDrawer({
   connectedComponent: DrawableForm,
 });
+
+const createRow = (action: TableAction) => {
+  formDrawerApi.setData({
+    api: RoleApi.create,
+    fields,
+    row: { status: '1' },
+    title: action.text,
+  });
+  formDrawerApi.open();
+};
+
 const editRow = (row: any, action: TableRowAction) => {
   formDrawerApi.setData({
     api: RoleApi.update,
@@ -50,6 +78,14 @@ const editRow = (row: any, action: TableRowAction) => {
   formDrawerApi.open();
 };
 
+const tableActions: TableAction[] = [
+  {
+    icon: MdiEdit,
+    text: '创建新角色',
+    handle: createRow,
+  },
+];
+
 const rowActions: TableRowAction[] = [
   {
     icon: MdiEdit,
@@ -59,14 +95,16 @@ const rowActions: TableRowAction[] = [
   {
     icon: MdiDelete,
     text: '删除',
+    handle: (row: any, _action: TableRowAction) => {
+      RoleApi.destroy(row).then((_: any) => {
+        reloadTable(); // TODO delete row length
+      });
+    },
+    popConfirm: {
+      title: '确定删除吗？',
+    },
   },
 ];
-
-const queryableTable =
-  useTemplateRef<InstanceType<typeof QueryableTable>>('queryableTable');
-const reloadTable = function () {
-  queryableTable.value?.reloadTable();
-};
 </script>
 
 <template>
@@ -75,6 +113,7 @@ const reloadTable = function () {
       ref="queryableTable"
       :fields="fields"
       :http-query="RoleApi.query"
+      :table-actions="tableActions"
       :row-actions="rowActions"
     />
     <DrawerForm @update="reloadTable" />

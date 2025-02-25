@@ -2,15 +2,25 @@ import { defineStore } from 'pinia';
 
 import { query } from '#/api';
 
+export interface DictItem {
+  id: number;
+  code: string;
+  label: string;
+  parent_id: number;
+  sort: number;
+  status: number;
+  updated_at: string;
+  children: DictItem[];
+}
 export const useDictStore = defineStore('dict-tree', {
   state: () => ({
-    dicts: [],
+    dicts: [] as DictItem[],
   }),
   actions: {
     async setDicts() {
       this.dicts = await query({ format: 'tree' });
     },
-    getDict(name: string) {
+    getDict(name: string): DictItem | undefined {
       return this.dicts.find((d) => d.code === name);
     },
   },

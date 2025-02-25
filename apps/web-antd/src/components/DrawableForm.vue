@@ -35,9 +35,9 @@ const [Drawer, drawerApi] = useVbenDrawer({
       formApi.setState({ schema: useFormField(fields, FieldPosition.FORM) });
       formApi.setValues(row, false);
       drawerTitle.value = title;
+      drawerApi.setState({ title });
     }
   },
-  title: drawerTitle,
 });
 </script>
 <template>

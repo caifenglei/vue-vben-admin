@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { TableRowActionProps } from '#/components/types';
+import type { TableActionProps } from '#/components/types';
 
 import { Button, Divider, Popconfirm } from 'ant-design-vue';
 
-const props = withDefaults(defineProps<TableRowActionProps>(), {});
+const props = withDefaults(defineProps<TableActionProps>(), {});
 </script>
 
 <template>
@@ -16,9 +16,9 @@ const props = withDefaults(defineProps<TableRowActionProps>(), {});
         :title="action.popConfirm.title"
         :ok-text="action.popConfirm.confirmText || '确定'"
         :cancel-text="action.popConfirm.confirmText || '取消'"
-        @confirm="() => action.handle(props.row, action)"
+        @confirm="() => action.handle(action)"
       >
-        <Button type="link" :key="index">
+        <Button type="primary" :key="index">
           <template #icon>
             <component :is="action.icon" />
           </template>
@@ -28,8 +28,8 @@ const props = withDefaults(defineProps<TableRowActionProps>(), {});
       <Button
         v-else
         :key="index"
-        type="link"
-        @click="() => action.handle(props.row, action)"
+        type="primary"
+        @click="() => action.handle(action)"
       >
         <template #icon>
           <component :is="action.icon" />
