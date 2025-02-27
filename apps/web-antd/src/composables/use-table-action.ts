@@ -74,6 +74,15 @@ export function useTableAction(props: TableActionProps) {
         title: '确定删除吗？',
       },
     },
+    {
+      icon: MdiDelete,
+      text: '分配权限',
+      handle: (row: any, _action: TableRowAction) => {
+        props.httpApis.destroy(row).then((_: any) => {
+          reloadTable(); // TODO delete row length
+        });
+      },
+    },
   ];
 
   return {

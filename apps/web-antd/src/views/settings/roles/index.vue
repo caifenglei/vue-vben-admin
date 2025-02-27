@@ -1,13 +1,15 @@
 <script lang="ts" setup>
-import type { EntityField } from '#/components/types';
+import type { EntityField, TableRowAction } from '#/components/types';
 
 import { useTemplateRef } from 'vue';
 
-import { Page } from '@vben/common-ui';
+import { Page, useVbenDrawer } from '@vben/common-ui';
+import { MdiCreate } from '@vben/icons';
 
 import { RoleApi } from '#/api';
 import QueryableTable from '#/components/QueryableTable.vue';
 import { useTableAction } from '#/composables/use-table-action';
+import RoleAllocation from '#/views/settings/roles/RoleAllocation.vue';
 
 const fields: EntityField[] = [
   {
@@ -54,6 +56,25 @@ const { tableActions, rowActions, DrawerForm, reloadTable } = useTableAction({
     label: '新增角色',
   },
 });
+
+// 角色分配操作
+const [AllocationDrawer, allocationDrawerApi] = useVbenDrawer({
+  connectedComponent: RoleAllocation,
+});
+const allocateRow: TableRowAction = {
+  icon: MdiCreate,
+  text: '分配',
+  handle: (row: any, _action: TableRowAction) => {
+    allocationDrawerApi
+      .setState({ class: 'w-full', placement: 'right' })
+      .setData({
+        httpApis: RoleApi,
+        row,
+      })
+      .open();
+  },
+};
+rowActions.unshift(allocateRow);
 </script>
 
 <template>
@@ -66,5 +87,6 @@ const { tableActions, rowActions, DrawerForm, reloadTable } = useTableAction({
       :row-actions="rowActions"
     />
     <DrawerForm @update="reloadTable" />
+    <AllocationDrawer />
   </Page>
 </template>
