@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 
-import { query } from '#/api';
+import { DictApi } from '#/api';
 
 export interface DictItem {
   id: number;
@@ -18,7 +18,7 @@ export const useDictStore = defineStore('dict-tree', {
   }),
   actions: {
     async setDicts() {
-      this.dicts = await query({ format: 'tree' });
+      this.dicts = await DictApi.query({ format: 'tree' });
     },
     getDict(name: string): DictItem | undefined {
       return this.dicts.find((d) => d.code === name);

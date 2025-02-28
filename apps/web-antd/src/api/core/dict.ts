@@ -5,5 +5,5 @@ import { requestClient } from '#/api/request';
  * 获取表格数据
  */
 export async function query(params: TableApi.PageFetchParams) {
-  return requestClient.get('v2/mp/dicts/list', { params });
+  return requestClient.get('v2/mp/dicts', { params });
 }

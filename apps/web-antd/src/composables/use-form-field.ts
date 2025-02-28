@@ -1,6 +1,9 @@
 import type { VbenFormSchema } from '#/adapter/form';
 import type { EntityField } from '#/components/types';
 
+import { markRaw } from 'vue';
+
+import ImageUploader from '#/components/ImageUploader.vue';
 import { useDictStore } from '#/store/modules/dict';
 
 export enum FieldPosition {
@@ -24,31 +27,48 @@ export function useFormField(fields: EntityField[], type: FieldPosition) {
     if (type === FieldPosition.FORM) {
       schema.rules = attrs.rules;
     }
-    if (component === 'Input') {
-      schema.componentProps = {
-        ...attrs.props,
-        placeholder: attrs.props?.placeholder || `请输入${attrs.label}`,
-        allowClear: true,
-        maxlength: attrs.props?.maxlength || 64,
-        showCount: true,
-      };
-    } else if (component === 'Select') {
-      let options = [] as any[];
-      if (attrs.dictName) {
-        const dictStore = useDictStore();
-        options =
-          dictStore.getDict(attrs.dictName)?.children.map((item: any) => ({
-            label: item.label,
-            value: item.code,
-          })) || [];
+    switch (component) {
+      case 'Input': {
+        schema.componentProps = {
+          ...attrs.props,
+          placeholder: attrs.props?.placeholder || `请输入${attrs.label}`,
+          allowClear: true,
+          maxlength: attrs.props?.maxlength || 64,
+          showCount: true,
+        };
+
+        break;
       }
-      schema.componentProps = {
-        ...attrs.props,
-        options,
-        allowClear: true,
-        placeholder: attrs.props?.placeholder || `请选择${attrs.label}`,
-        class: 'w-full',
-      };
+      case 'Select': {
+        let options = [] as any[];
+        if (attrs.dictName) {
+          const dictStore = useDictStore();
+          options =
+            dictStore.getDict(attrs.dictName)?.children.map((item: any) => ({
+              label: item.label,
+              value: item.code,
+            })) || [];
+        }
+        schema.componentProps = {
+          ...attrs.props,
+          options,
+          allowClear: true,
+          placeholder: attrs.props?.placeholder || `请选择${attrs.label}`,
+          class: 'w-full',
+        };
+
+        break;
+      }
+      case 'Upload': {
+        schema.component = markRaw(ImageUploader);
+        schema.componentProps = {
+          ...attrs.props,
+          name,
+        };
+
+        break;
+      }
+      // No default
     }
     return schema;
   });

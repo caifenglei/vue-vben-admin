@@ -1,19 +1,13 @@
 <script setup lang="ts">
 import type { EntityField } from '#/components/types';
 
-import { Page, useVbenDrawer } from '@vben/common-ui';
+import { useTemplateRef } from 'vue';
 
-import { Button } from 'ant-design-vue';
+import { Page } from '@vben/common-ui';
 
-import { query } from '#/api';
-import DrawableForm from '#/components/DrawableForm.vue';
+import { DictApi } from '#/api';
 import QueryableTable from '#/components/QueryableTable.vue';
-
-// interface DataItem {
-//   label: string;
-//   value: string;
-//   children: DataItem[];
-// }
+import { useTableAction } from '#/composables/use-table-action';
 
 const fields: EntityField[] = [
   {
@@ -43,27 +37,25 @@ const fields: EntityField[] = [
   },
 ];
 
-const [DrawerForm, formDrawerApi] = useVbenDrawer({
-  connectedComponent: DrawableForm,
+const { tableActions, rowActions, DrawerForm, reloadTable } = useTableAction({
+  tableRef: useTemplateRef<InstanceType<typeof QueryableTable>>('mainTable'),
+  httpApis: DictApi,
+  fields,
+  createAction: {
+    label: '新增字典',
+  },
 });
-const createDict = () => {
-  formDrawerApi.setData({
-    fields,
-    title: '新增字典',
-  });
-  formDrawerApi.open();
-};
 </script>
 
 <template>
   <Page auto-content-height>
-    <QueryableTable :fields="fields" :http-query="query">
-      <template #toolbar-tools>
-        <Button class="mr-2" type="primary" @click="createDict">
-          新增字典
-        </Button>
-      </template>
-    </QueryableTable>
-    <DrawerForm />
+    <QueryableTable
+      ref="mainTable"
+      :fields="fields"
+      :http-query="DictApi.query"
+      :table-actions="tableActions"
+      :row-actions="rowActions"
+    />
+    <DrawerForm @update="reloadTable" />
   </Page>
 </template>
