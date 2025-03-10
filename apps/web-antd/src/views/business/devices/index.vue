@@ -23,6 +23,7 @@ const fields: EntityField[] = [
     name: 'photos',
     label: '图片',
     component: 'Upload',
+    rules: 'required',
     range: [false, false, true, true],
   },
   {
