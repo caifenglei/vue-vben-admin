@@ -35,7 +35,15 @@ const [Drawer, drawerApi] = useVbenDrawer({
     if (isOpen) {
       const { row, fields, title } = drawerApi.getData<Record<string, any>>();
       // 绘制表单
-      formApi.setState({ schema: useFormField(fields, FieldPosition.FORM) });
+      formApi.setState({
+        commonConfig: {
+          // 所有表单项
+          componentProps: {
+            class: 'w-full',
+          },
+        },
+        schema: useFormField(fields, FieldPosition.FORM),
+      });
       // 将row数据转为字符串类型
       const data = {} as Record<string, any>;
       for (const [key, value] of Object.entries(row)) {

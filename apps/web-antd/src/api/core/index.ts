@@ -10,6 +10,7 @@ export * from './auth';
 export * as DeviceApi from './device';
 export * as DictApi from './dict';
 export * from './menu';
+export * as ModelApi from './model';
 export * as PermissionApi from './permission';
 export * as RoleApi from './role';
 export * from './table';

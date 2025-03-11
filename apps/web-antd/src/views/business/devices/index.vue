@@ -5,7 +5,7 @@ import { useTemplateRef } from 'vue';
 
 import { Page } from '@vben/common-ui';
 
-import { DeviceApi } from '#/api';
+import { DeviceApi, ModelApi } from '#/api';
 import QueryableTable from '#/components/QueryableTable.vue';
 import { useTableAction } from '#/composables/use-table-action';
 
@@ -49,7 +49,6 @@ const fields: EntityField[] = [
     rules: 'required',
     range: [false, true, true, true],
   },
-  // model
   {
     name: 'area',
     label: '区域',
@@ -59,12 +58,49 @@ const fields: EntityField[] = [
     range: [true, true, true, true],
   },
   {
+    name: '_divider',
+    component: 'Divider',
+    range: [false, false, true, false],
+  },
+  {
+    name: 'model_id',
+    label: '型号',
+    component: 'ApiSelect',
+    api: ModelApi.query,
+    optionRender: (item) => ({
+      label: `${item.brand} - ${item.name}`,
+      value: item.id,
+    }),
+    optionLabelKey: 'name',
+    optionValueKey: 'id',
+    rules: 'selectRequired',
+    range: [false, true, true, true],
+  },
+  {
     name: 'status',
     label: '状态',
     component: 'Select',
     dictName: 'device_status',
     rules: 'required',
     range: [true, true, true, true],
+  },
+  {
+    name: 'video_link',
+    label: '视频链接',
+    component: 'Input',
+    range: [false, false, true, true],
+  },
+  {
+    name: 'web_link',
+    label: '网页链接',
+    component: 'Input',
+    range: [false, false, true, true],
+  },
+  {
+    name: 'remark',
+    label: '备注',
+    component: 'Textarea',
+    range: [false, false, true, true],
   },
   {
     name: 'updated_at',
