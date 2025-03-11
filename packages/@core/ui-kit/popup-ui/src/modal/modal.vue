@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import type { ExtendedModalApi, ModalProps } from './modal';
 
+import { computed, nextTick, provide, ref, useId, watch } from 'vue';
+
 import {
   useIsMobile,
   usePriorityValues,
@@ -23,7 +25,6 @@ import {
 import { ELEMENT_ID_MAIN_CONTENT } from '@vben-core/shared/constants';
 import { globalShareState } from '@vben-core/shared/global-state';
 import { cn } from '@vben-core/shared/utils';
-import { computed, nextTick, provide, ref, useId, watch } from 'vue';
 
 import { useModalDraggable } from './use-modal-draggable';
 
@@ -171,7 +172,9 @@ function handleFocusOutside(e: Event) {
   e.stopPropagation();
 }
 const getAppendTo = computed(() => {
-  return appendToMain.value ? `#${ELEMENT_ID_MAIN_CONTENT}` : undefined;
+  return appendToMain.value
+    ? `#${ELEMENT_ID_MAIN_CONTENT}>div:not(.absolute)>div`
+    : undefined;
 });
 </script>
 <template>
@@ -199,12 +202,13 @@ const getAppendTo = computed(() => {
       "
       :modal="modal"
       :open="state?.isOpen"
-      :show-close="submitting ? false : closable"
+      :show-close="closable"
       :z-index="zIndex"
       :overlay-blur="overlayBlur"
       close-class="top-3"
       @close-auto-focus="handleFocusOutside"
       @closed="() => modalApi?.onClosed()"
+      :close-disabled="submitting"
       @escape-key-down="escapeKeyDown"
       @focus-outside="handleFocusOutside"
       @interact-outside="interactOutside"

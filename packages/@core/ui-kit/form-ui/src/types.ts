@@ -1,8 +1,10 @@
+import type { FieldOptions, FormContext, GenericObject } from 'vee-validate';
+import type { ZodTypeAny } from 'zod';
+
+import type { Component, HtmlHTMLAttributes, Ref } from 'vue';
+
 import type { VbenButtonProps } from '@vben-core/shadcn-ui';
 import type { ClassType, MaybeComputedRef } from '@vben-core/typings';
-import type { FieldOptions, FormContext, GenericObject } from 'vee-validate';
-import type { Component, HtmlHTMLAttributes, Ref } from 'vue';
-import type { ZodTypeAny } from 'zod';
 
 import type { FormApi } from './form-api';
 
@@ -18,7 +20,7 @@ export type BaseFormComponentType =
   | 'VbenSelect'
   | (Record<never, never> & string);
 
-type Breakpoints = '' | '2xl:' | '3xl:' | 'lg:' | 'md:' | 'sm:' | 'xl:';
+type Breakpoints = '2xl:' | '3xl:' | '' | 'lg:' | 'md:' | 'sm:' | 'xl:';
 
 type GridCols = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13;
 
@@ -34,12 +36,12 @@ export type FormItemClassType =
   | WrapperClassType;
 
 export type FormFieldOptions = Partial<
-  {
+  FieldOptions & {
     validateOnBlur?: boolean;
     validateOnChange?: boolean;
     validateOnInput?: boolean;
     validateOnModelUpdate?: boolean;
-  } & FieldOptions
+  }
 >;
 
 export interface FormShape {
@@ -242,13 +244,13 @@ export interface FormSchema<
   /** 依赖 */
   dependencies?: FormItemDependencies;
   /** 描述 */
-  description?: string;
+  description?: CustomRenderType;
   /** 字段名 */
   fieldName: string;
   /** 帮助信息 */
-  help?: string;
+  help?: CustomRenderType;
   /** 表单项 */
-  label?: string;
+  label?: CustomRenderType;
   // 自定义组件内部渲染
   renderComponentContent?: RenderComponentContentType;
   /** 字段规则 */
@@ -381,11 +383,11 @@ export interface VbenFormProps<
   submitOnEnter?: boolean;
 }
 
-export type ExtendedFormApi = {
+export type ExtendedFormApi = FormApi & {
   useStore: <T = NoInfer<VbenFormProps>>(
     selector?: (state: NoInfer<VbenFormProps>) => T,
   ) => Readonly<Ref<T>>;
-} & FormApi;
+};
 
 export interface VbenFormAdapterOptions<
   T extends BaseFormComponentType = BaseFormComponentType,

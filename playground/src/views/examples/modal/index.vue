@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { Page, useVbenModal } from '@vben/common-ui';
+
 import { Button, Card, Flex } from 'ant-design-vue';
 
 import DocButton from '../doc-button.vue';
@@ -12,6 +13,8 @@ import FormModalDemo from './form-modal-demo.vue';
 import InContentModalDemo from './in-content-demo.vue';
 import NestedDemo from './nested-demo.vue';
 import SharedDataDemo from './shared-data-demo.vue';
+
+defineOptions({ name: 'ModalExample' });
 
 const [BaseModal, baseModalApi] = useVbenModal({
   // 连接抽离的组件
