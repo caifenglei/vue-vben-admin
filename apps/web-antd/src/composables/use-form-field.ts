@@ -36,19 +36,18 @@ export function useFormField(fields: EntityField[], type: FieldPosition) {
           maxlength: attrs.props?.maxlength || 64,
           showCount: true,
         };
-
+        break;
+      }
+      case 'RadioGroup': {
+        const options = getDictOptions(attrs.dictName);
+        schema.componentProps = {
+          ...attrs.props,
+          options,
+        };
         break;
       }
       case 'Select': {
-        let options = [] as any[];
-        if (attrs.dictName) {
-          const dictStore = useDictStore();
-          options =
-            dictStore.getDict(attrs.dictName)?.children.map((item: any) => ({
-              label: item.label,
-              value: item.code,
-            })) || [];
-        }
+        const options = getDictOptions(attrs.dictName);
         schema.componentProps = {
           ...attrs.props,
           options,
@@ -56,7 +55,6 @@ export function useFormField(fields: EntityField[], type: FieldPosition) {
           placeholder: attrs.props?.placeholder || `请选择${attrs.label}`,
           class: 'w-full',
         };
-
         break;
       }
       case 'Upload': {
@@ -73,4 +71,17 @@ export function useFormField(fields: EntityField[], type: FieldPosition) {
     return schema;
   });
   return formSchema;
+}
+
+function getDictOptions(dictCode: string) {
+  let options = [] as any[];
+  if (dictCode) {
+    const dictStore = useDictStore();
+    options =
+      dictStore.getDict(dictCode)?.children.map((item: any) => ({
+        label: item.label,
+        value: item.code,
+      })) || [];
+  }
+  return options;
 }

@@ -36,7 +36,16 @@ const fields: EntityField[] = [
   {
     name: 'condition',
     label: '成色',
-    component: 'Input',
+    component: 'Select',
+    dictName: 'device_quality',
+    rules: 'required',
+    range: [false, true, true, true],
+  },
+  {
+    name: 'waterproof',
+    label: '喷墨防水',
+    component: 'RadioGroup',
+    dictName: 'yes_or_no',
     rules: 'required',
     range: [false, true, true, true],
   },
