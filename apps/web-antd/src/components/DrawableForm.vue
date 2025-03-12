@@ -3,6 +3,7 @@ import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
 import { FieldPosition, useFormField } from '#/composables/use-form-field';
+import { useFormValue } from '#/composables/use-form-value';
 
 defineOptions({
   name: 'DrawableForm',
@@ -44,12 +45,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
         },
         schema: useFormField(fields, FieldPosition.FORM),
       });
-      // 将row数据转为字符串类型
-      const data = {} as Record<string, any>;
-      for (const [key, value] of Object.entries(row)) {
-        data[key] = Number.isNaN(value) ? value : `${value}`;
-      }
-      formApi.setValues(data, false);
+      formApi.setValues(useFormValue(fields, row), false);
       // 设置抽屉标题
       drawerApi.setState({ title });
     }

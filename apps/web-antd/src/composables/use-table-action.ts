@@ -11,13 +11,14 @@ import DrawableForm from '#/components/DrawableForm.vue';
 
 export interface TableActionProps {
   tableRef: any;
-  httpApis: any;
+  httpApis: any; // 接口集
   fields: EntityField[];
   createAction?: {
     defaultData?: Record<string, any>;
     label: string;
   };
 }
+// 表级操作
 export function useTableAction(props: TableActionProps) {
   const queryableTable = props.tableRef;
   const reloadTable = function () {
@@ -74,15 +75,15 @@ export function useTableAction(props: TableActionProps) {
         title: '确定删除吗？',
       },
     },
-    {
-      icon: MdiDelete,
-      text: '分配权限',
-      handle: (row: any, _action: TableRowAction) => {
-        props.httpApis.destroy(row).then((_: any) => {
-          reloadTable(); // TODO delete row length
-        });
-      },
-    },
+    // {
+    //   icon: MdiDelete,
+    //   text: '分配权限',
+    //   handle: (row: any, _action: TableRowAction) => {
+    //     props.httpApis.destroy(row).then((_: any) => {
+    //       reloadTable(); // TODO delete row length
+    //     });
+    //   },
+    // },
   ];
 
   return {

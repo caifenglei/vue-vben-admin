@@ -50,6 +50,7 @@ export interface QueryableTableProps {
   fields: EntityField[];
   tableActions?: TableAction[];
   rowActions?: TableRowAction[];
+  actionColumnWidth?: number;
   httpQuery: (params: TableApi.PageFetchParams) => Promise<any>;
   onQueryChange?: (query: any) => void;
 }

@@ -9,6 +9,13 @@ import { DeviceApi, ModelApi } from '#/api';
 import QueryableTable from '#/components/QueryableTable.vue';
 import { useTableAction } from '#/composables/use-table-action';
 
+const viewDetail = (
+  _row: Record<string, any>,
+  _column: Record<string, any>,
+) => {
+  // console.log(row, column, 'row ... column');
+};
+
 const fields: EntityField[] = [
   {
     name: 'keyword',
@@ -31,6 +38,20 @@ const fields: EntityField[] = [
     label: '机号',
     component: 'Input',
     rules: 'required',
+    cellRender: { name: 'CellLink', props: { handler: viewDetail } },
+    range: [false, true, true, true],
+  },
+  {
+    name: 'model_id',
+    label: '型号',
+    component: 'ApiSelect',
+    api: ModelApi.query,
+    relationship: 'model',
+    optionRender: (item) => ({
+      label: `${item.brand} - ${item.name}`,
+      value: item.id,
+    }),
+    rules: 'selectRequired',
     range: [false, true, true, true],
   },
   {
@@ -50,31 +71,17 @@ const fields: EntityField[] = [
     range: [false, true, true, true],
   },
   {
+    name: '_divider',
+    component: 'Divider',
+    range: [false, false, true, false],
+  },
+  {
     name: 'area',
     label: '区域',
     component: 'Select',
     dictName: 'simple_areas',
     rules: 'required',
     range: [true, true, true, true],
-  },
-  {
-    name: '_divider',
-    component: 'Divider',
-    range: [false, false, true, false],
-  },
-  {
-    name: 'model_id',
-    label: '型号',
-    component: 'ApiSelect',
-    api: ModelApi.query,
-    optionRender: (item) => ({
-      label: `${item.brand} - ${item.name}`,
-      value: item.id,
-    }),
-    optionLabelKey: 'name',
-    optionValueKey: 'id',
-    rules: 'selectRequired',
-    range: [false, true, true, true],
   },
   {
     name: 'status',
@@ -119,24 +126,24 @@ const { tableActions, rowActions, DrawerForm, reloadTable } = useTableAction({
   },
 });
 
-// 角色分配操作
+// 出租操作
 // const [AllocationDrawer, allocationDrawerApi] = useVbenDrawer({
 //   connectedComponent: RoleAllocation,
 // });
-// const allocateRow: TableRowAction = {
-//   icon: MdiCreate,
-//   text: '分配',
-//   handle: (row: any, _action: TableRowAction) => {
-//     allocationDrawerApi
-//       .setState({ class: 'w-full', placement: 'right' })
-//       .setData({
-//         httpApis: RoleApi,
-//         row,
-//       })
-//       .open();
-//   },
-// };
-// rowActions.unshift(allocateRow);
+const allocateRow: TableRowAction = {
+  // icon: MdiCreate,
+  text: '出租',
+  handle: (_row: any, _action: TableRowAction) => {
+    // allocationDrawerApi
+    //   .setState({ class: 'w-full', placement: 'right' })
+    //   .setData({
+    //     httpApis: RoleApi,
+    //     row,
+    //   })
+    //   .open();
+  },
+};
+rowActions.unshift(allocateRow);
 </script>
 
 <template>

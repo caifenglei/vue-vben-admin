@@ -17,7 +17,7 @@ export async function get(rowData: Record<string, any>) {
 }
 
 export async function update(rowData: Record<string, any>) {
-  return requestClient.put(`v2/spa/roles/${rowData.id}`, rowData);
+  return requestClient.put(`v2/spa/printers/${rowData.id}`, rowData);
 }
 
 export async function destroy(rowData: Record<string, any>) {

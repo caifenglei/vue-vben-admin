@@ -48,12 +48,18 @@ setupVbenVxeTable({
 
     // 表格配置项可以用 cellRender: { name: 'CellLink' },
     vxeUI.renderer.add('CellLink', {
-      renderTableDefault(renderOpts) {
+      renderTableDefault(renderOpts, params) {
         const { props } = renderOpts;
+        const { column, row } = params;
+        const value = row[column.field];
         return h(
           Button,
-          { size: 'small', type: 'link' },
-          { default: () => props?.text },
+          {
+            size: 'small',
+            type: 'link',
+            onClick: () => props.handler(row, column),
+          },
+          { default: () => value },
         );
       },
     });
@@ -70,6 +76,18 @@ setupVbenVxeTable({
           (opt: any) => opt.code === value.toString(),
         )?.label;
         return h('span', {}, { default: () => label || value });
+      },
+    });
+
+    // Api下拉选项在表格单元格中的展示
+    vxeUI.renderer.add('ApiSelectCell', {
+      renderTableDefault(renderOpts, params) {
+        const {
+          props: { field },
+        } = renderOpts;
+        const { row } = params;
+        const option = field.optionRender(row[field.relationship]);
+        return h('span', {}, { default: () => option.label || value });
       },
     });
 

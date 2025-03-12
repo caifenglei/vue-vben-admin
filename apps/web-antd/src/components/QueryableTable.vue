@@ -3,8 +3,7 @@ import type { VbenFormProps, VbenFormSchema } from '#/adapter/form';
 import type { VxeGridProps } from '#/adapter/vxe-table';
 import type { QueryableTableProps as Props } from '#/components/types';
 
-import { message } from 'ant-design-vue';
-
+// import { message } from 'ant-design-vue';
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import TableAction from '#/components/TableAction.vue';
 import TableRowAction from '#/components/TableRowAction.vue';
@@ -26,38 +25,42 @@ const tableColumns = props.fields
       field: field.name,
       title: field.label,
       treeNode: field.treeNode || false,
+      width: field.width || null,
+      cellRender: field.cellRender || {},
     };
     // 字典选项字段
-    if (field.component === 'Select' && field.dictName) {
+    if (['RadioGroup', 'Select'].includes(field.component) && field.dictName) {
       col.cellRender = {
         name: 'DictLabel', // Custom Render
         props: { dictName: field.dictName },
+      };
+    } else if (field.component === 'ApiSelect' && field.relationship) {
+      col.cellRender = {
+        name: 'ApiSelectCell', // Custom Render
+        props: { field },
       };
     }
     return col;
   });
 
 interface RowType {
-  // label: string;
-  // code: string;
-  // type: string;
-  // updated_at: string;
   [key: string]: any;
 }
 
 const formOptions: VbenFormProps = {
   // 默认展开
   collapsed: false,
+  actionButtonsReverse: true,
   schema: querySchema,
   // 控制表单是否显示折叠按钮
   showCollapseButton: true,
   // 按下回车时是否提交表单
-  submitOnEnter: false,
+  submitOnEnter: true,
 };
 
 const columns = [
   { align: 'left', title: '', type: 'checkbox', width: 50 },
-  { title: '序号', type: 'seq', width: 80 },
+  { title: '序号', type: 'seq', width: 60 },
   ...tableColumns,
 ];
 
@@ -65,6 +68,7 @@ if (props.rowActions?.length > 0) {
   columns.push({
     slots: { default: 'actions' },
     title: '操作',
+    width: props.actionColumnWidth || 320,
   });
 }
 
@@ -85,7 +89,7 @@ const gridOptions: VxeGridProps<RowType> = {
     },
     ajax: {
       query: async ({ page }, formValues) => {
-        message.success(`Query params: ${JSON.stringify(formValues)}`);
+        // message.success(`Query params: ${JSON.stringify(formValues)}`);
         return await props.httpQuery({
           page: page.currentPage,
           pageSize: page.pageSize,
