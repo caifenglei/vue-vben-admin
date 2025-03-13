@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { TableRowActionProps } from '#/components/types';
 
+import { VbenIcon } from '@vben-core/shadcn-ui';
+
 import { Button, Divider, Popconfirm } from 'ant-design-vue';
 
 const props = withDefaults(defineProps<TableRowActionProps>(), {});
@@ -20,7 +22,8 @@ const props = withDefaults(defineProps<TableRowActionProps>(), {});
       >
         <Button type="link" :key="index">
           <template #icon>
-            <component :is="action.icon" />
+            <!--            <component :is="action.icon" />-->
+            <VbenIcon :icon="action.icon" />
           </template>
           {{ action.text }}
         </Button>
@@ -32,7 +35,7 @@ const props = withDefaults(defineProps<TableRowActionProps>(), {});
         @click="() => action.handle(props.row, action)"
       >
         <template #icon>
-          <component :is="action.icon" />
+          <VbenIcon :icon="action.icon" />
         </template>
         {{ action.text }}
       </Button>

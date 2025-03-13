@@ -1,19 +1,24 @@
 <script lang="ts" setup>
-import type { EntityField } from '#/components/types';
+import type { EntityField, TableRowAction } from '#/components/types';
 
 import { useTemplateRef } from 'vue';
 
-import { Page } from '@vben/common-ui';
+import { Page, useVbenDrawer } from '@vben/common-ui';
 
 import { DeviceApi, ModelApi } from '#/api';
+import DrawableDetail from '#/components/DrawableDetail.vue';
 import QueryableTable from '#/components/QueryableTable.vue';
 import { useTableAction } from '#/composables/use-table-action';
 
-const viewDetail = (
-  _row: Record<string, any>,
-  _column: Record<string, any>,
-) => {
+const [DrawerDetail, drawerDetailApi] = useVbenDrawer({
+  connectedComponent: DrawableDetail,
+});
+const viewDetail = (row: Record<string, any>, _column: Record<string, any>) => {
   // console.log(row, column, 'row ... column');
+  drawerDetailApi
+    .setData({ fields, row, title: '查看详情' })
+    .setState({ contentClass: 'p-4', placement: 'right', footer: false })
+    .open();
 };
 
 const fields: EntityField[] = [
@@ -131,7 +136,7 @@ const { tableActions, rowActions, DrawerForm, reloadTable } = useTableAction({
 //   connectedComponent: RoleAllocation,
 // });
 const allocateRow: TableRowAction = {
-  // icon: MdiCreate,
+  icon: 'lucide:circle-arrow-out-up-right',
   text: '出租',
   handle: (_row: any, _action: TableRowAction) => {
     // allocationDrawerApi
@@ -156,5 +161,8 @@ rowActions.unshift(allocateRow);
       :row-actions="rowActions"
     />
     <DrawerForm @update="reloadTable" />
+    <DrawerDetail class="w-2/3">
+      <div>default slot...</div>
+    </DrawerDetail>
   </Page>
 </template>
