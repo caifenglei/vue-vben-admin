@@ -14,4 +14,4 @@ export * as ModelApi from './model';
 export * as PermissionApi from './permission';
 export * as RoleApi from './role';
 export * from './table';
-export * from './user';
+export * as UserApi from './user';

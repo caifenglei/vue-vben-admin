@@ -1,25 +1,15 @@
 <script lang="ts" setup>
-import type { EntityField, TableRowAction } from '#/components/types';
+import type { EntityField } from '#/components/types';
 
 import { useTemplateRef } from 'vue';
 
-import { Page, useVbenDrawer } from '@vben/common-ui';
+import { Page } from '@vben/common-ui';
 
 import { DeviceApi, ModelApi } from '#/api';
-import DrawableDetail from '#/components/DrawableDetail.vue';
 import QueryableTable from '#/components/QueryableTable.vue';
 import { useTableAction } from '#/composables/use-table-action';
-
-const [DrawerDetail, drawerDetailApi] = useVbenDrawer({
-  connectedComponent: DrawableDetail,
-});
-const viewDetail = (row: Record<string, any>, _column: Record<string, any>) => {
-  // console.log(row, column, 'row ... column');
-  drawerDetailApi
-    .setData({ fields, row, title: '查看详情' })
-    .setState({ contentClass: 'p-4', placement: 'right', footer: false })
-    .open();
-};
+import { useViewAction } from '#/composables/use-view-action';
+import { useRentForm } from '#/views/business/devices/use-rent-form';
 
 const fields: EntityField[] = [
   {
@@ -43,7 +33,10 @@ const fields: EntityField[] = [
     label: '机号',
     component: 'Input',
     rules: 'required',
-    cellRender: { name: 'CellLink', props: { handler: viewDetail } },
+    cellRender: {
+      name: 'CellLink',
+      props: { handler: (row, column) => viewDetail(row, column) },
+    },
     range: [false, true, true, true],
   },
   {
@@ -122,8 +115,11 @@ const fields: EntityField[] = [
   },
 ];
 
+const [DrawerDetail, viewDetail] = useViewAction(fields);
+const mainTable =
+  useTemplateRef<InstanceType<typeof QueryableTable>>('mainTable');
 const { tableActions, rowActions, DrawerForm, reloadTable } = useTableAction({
-  tableRef: useTemplateRef<InstanceType<typeof QueryableTable>>('mainTable'),
+  tableRef: mainTable,
   httpApis: DeviceApi,
   fields,
   createAction: {
@@ -132,23 +128,11 @@ const { tableActions, rowActions, DrawerForm, reloadTable } = useTableAction({
 });
 
 // 出租操作
-// const [AllocationDrawer, allocationDrawerApi] = useVbenDrawer({
-//   connectedComponent: RoleAllocation,
-// });
-const allocateRow: TableRowAction = {
-  icon: 'lucide:circle-arrow-out-up-right',
-  text: '出租',
-  handle: (_row: any, _action: TableRowAction) => {
-    // allocationDrawerApi
-    //   .setState({ class: 'w-full', placement: 'right' })
-    //   .setData({
-    //     httpApis: RoleApi,
-    //     row,
-    //   })
-    //   .open();
-  },
-};
-rowActions.unshift(allocateRow);
+const [RentDrawer, rentAction] = useRentForm({
+  tableRef: mainTable,
+  httpApis: DeviceApi,
+});
+rowActions.unshift(rentAction);
 </script>
 
 <template>
@@ -161,8 +145,7 @@ rowActions.unshift(allocateRow);
       :row-actions="rowActions"
     />
     <DrawerForm @update="reloadTable" />
-    <DrawerDetail class="w-2/3">
-      <div>default slot...</div>
-    </DrawerDetail>
+    <DrawerDetail class="w-2/3" />
+    <RentDrawer />
   </Page>
 </template>

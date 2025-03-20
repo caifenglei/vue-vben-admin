@@ -53,7 +53,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
 });
 </script>
 <template>
-  <Drawer>
+  <Drawer append-to-main>
     <Form />
   </Drawer>
 </template>
