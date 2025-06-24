@@ -62,11 +62,13 @@ export function useVbenModal<TParentModalProps extends ModalProps = ModalProps>(
             slots,
           );
       },
+      // eslint-disable-next-line vue/one-component-per-file
       {
-        inheritAttrs: false,
         name: 'VbenParentModal',
+        inheritAttrs: false,
       },
     );
+
     return [Modal, extendedApi as ExtendedModalApi] as const;
   }
 
@@ -84,13 +86,13 @@ export function useVbenModal<TParentModalProps extends ModalProps = ModalProps>(
   };
 
   const onClosed = mergedOptions.onClosed;
-
   mergedOptions.onClosed = () => {
     onClosed?.();
     if (mergedOptions.destroyOnClose) {
       injectData.reCreateModal?.();
     }
   };
+
   const api = new ModalApi(mergedOptions);
 
   const extendedApi: ExtendedModalApi = api as never;
@@ -112,12 +114,14 @@ export function useVbenModal<TParentModalProps extends ModalProps = ModalProps>(
           slots,
         );
     },
+    // eslint-disable-next-line vue/one-component-per-file
     {
-      inheritAttrs: false,
       name: 'VbenModal',
+      inheritAttrs: false,
     },
   );
   injectData.extendApi?.(extendedApi);
+
   return [Modal, extendedApi] as const;
 }
 
